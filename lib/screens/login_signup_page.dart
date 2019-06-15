@@ -43,7 +43,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
       body: Stack(
         children: <Widget>[
           _showBody(),
-          _showCircularProgress(),
+          _showCircularProgress(), 
         ],
       ));
   }
