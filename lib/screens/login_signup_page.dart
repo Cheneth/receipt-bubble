@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:my_app/services/authentication.dart';
 
 
 enum FormMode { LOGIN, SIGNUP }
 
 class LoginSignUpPage extends StatefulWidget {
+
+  LoginSignUpPage({this.auth, this.onSignedIn});
+
+  final BaseAuth auth;
+  final VoidCallback onSignedIn;
 
   @override
   State<StatefulWidget> createState() => new _LoginSignUpPageState();
@@ -23,7 +32,46 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
   bool _isIos;
   bool _isLoading;
 
-  void _validateAndSubmit() async {}
+  void _validateAndSubmit() async {
+    setState(() {
+      _errorMessage = "";
+      _isLoading = true;
+    });
+    if (_validateAndSave()) {
+      String userId = "";
+      try {
+        if (_formMode == FormMode.LOGIN) {
+          userId = await widget.auth.signIn(_email, _password);
+          print('Signed in: $userId');
+        } else {
+          print(_email + _password);
+          userId = await widget.auth.signUp(_email, _password);
+          print('Signed up user: $userId');
+        }
+        if (userId.length > 0 && userId != null) {
+          widget.onSignedIn();
+        }
+      } catch (e) {
+        print('Error: $e');
+        setState(() {
+          _isLoading = false;
+          if (_isIos) {
+            _errorMessage = e.details;
+          } else
+            _errorMessage = e.message;
+        });
+      }
+    }
+  }
+
+  bool _validateAndSave() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
+  }
 
   @override
   void initState() {
@@ -100,7 +148,15 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
               Icons.lock,
               color: Colors.grey,
             )),
-        validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
+        // validator: (value) => value.isNotEmpty ? 'Password can\'t be empty' : null,
+        validator: (value) {
+          if (value.isEmpty) {
+            debugPrint('hi');
+            return 'Enter some text';
+          }
+          debugPrint('bye');
+          return null;
+        },
         onSaved: (value) => _password = value,
       ),
     );
@@ -114,6 +170,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
         minWidth: 200.0,
         height: 42.0,
         color: Colors.blue,
+        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
         child: _formMode == FormMode.LOGIN
             ? new Text('Login',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white))
@@ -182,7 +239,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
               _showPasswordInput(),
               _showPrimaryButton(),
               _showSecondaryButton(),
-              // _showErrorMessage(),
+              _showErrorMessage(),
             ],
           ),
         ));

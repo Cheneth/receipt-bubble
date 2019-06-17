@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "56861587573",
+    "firebase_url": "https://receipt-bubble.firebaseio.com",
+    "project_id": "receipt-bubble",
+    "storage_bucket": "receipt-bubble.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:56861587573:android:61f2715ec9c4d11b",
+        "android_client_info": {
+          "package_name": "com.cheneth.receipt_bubble"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "56861587573-t2jnhmukqmji45jrb78r59aof94kgsec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4B_6NMOCEAUA93hviI13nSHBefARY4nA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "56861587573-t2jnhmukqmji45jrb78r59aof94kgsec.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "56861587573-s5qqp1oi6cf3m91va0dgva9uj3pkprpa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cheneth.receipt-bubble"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

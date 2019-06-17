@@ -1,4 +1,4 @@
-package com.example.my_app;
+package com.cheneth.receipt_bubble;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
