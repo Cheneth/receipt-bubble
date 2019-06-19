@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/widgets/random_words.dart';
 import 'package:my_app/screens/login_signup_page.dart';
+import 'package:my_app/screens/root_page.dart';
 
 import 'services/authentication.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         accentColor: Colors.red,
       ),
-      home: new LoginSignUpPage(auth: new Auth())
+      home: new RootPage(auth: new Auth())
     );
   }
 }
