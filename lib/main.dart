@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/widgets/random_words.dart';
-import 'package:my_app/screens/login_signup_page.dart';
-import 'package:my_app/screens/root_page.dart';
+import 'package:receipt_bubble/widgets/random_words.dart';
+import 'package:receipt_bubble/screens/login_signup_page.dart';
+import 'package:receipt_bubble/screens/root_page.dart';
 
 import 'services/authentication.dart';
 
@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Startup name generator',
       theme: ThemeData(
-        primaryColor: Colors.white,
-        accentColor: Colors.red,
+        primaryColor: Colors.amber,
+        accentColor: Colors.white,
       ),
       home: new RootPage(auth: new Auth())
     );

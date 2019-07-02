@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:my_app/screens/login_signup_page.dart';
-import 'package:my_app/services/authentication.dart';
-import 'package:my_app/screens/home_page.dart';
+import 'package:receipt_bubble/screens/login_signup_page.dart';
+import 'package:receipt_bubble/services/authentication.dart';
+import 'package:receipt_bubble/screens/home_page.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({this.auth});
