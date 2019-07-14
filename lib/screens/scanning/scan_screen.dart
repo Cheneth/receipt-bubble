@@ -53,7 +53,7 @@ class ScanScreenState extends State<ScanScreen> {
     try {
       cameras = await availableCameras();
       _controller = new CameraController(cameras[0], ResolutionPreset.medium);
-      await _controller.initialize();
+      _initializeControllerFuture =  _controller.initialize();
     } on CameraException catch (_) {
       setState(() {
         isReady = false;
@@ -83,15 +83,19 @@ class ScanScreenState extends State<ScanScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             // If the Future is complete, display the preview.
+            print('preview');
             return CameraPreview(_controller);
           } else {
             // Otherwise, display a loading indicator.
+            print('loading');
+
             return Center(child: CircularProgressIndicator());
           }
         },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.camera_alt),
+        
         // Provide an onPressed callback.
         onPressed: () async {
           // Take the Picture in a try / catch block. If anything goes wrong,
@@ -125,6 +129,7 @@ class ScanScreenState extends State<ScanScreen> {
           }
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

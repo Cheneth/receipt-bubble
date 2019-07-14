@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:receipt_bubble/screens/scanning/scan_screen.dart';
 import 'package:receipt_bubble/services/authentication.dart';
 import 'package:receipt_bubble/widgets/random_words.dart';
 import 'package:receipt_bubble/widgets/color_test.dart';
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
  int _currentIndex = 0;
 final List<Widget> _children = [
   PlaceholderWidget(Colors.white),
-  PlaceholderWidget(Colors.deepOrange),
+  ScanScreen(),
   PlaceholderWidget(Colors.green),
   PlaceholderWidget(Colors.pink),
 
