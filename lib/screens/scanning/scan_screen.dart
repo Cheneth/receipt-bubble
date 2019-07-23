@@ -52,7 +52,7 @@ class ScanScreenState extends State<ScanScreen> {
   Future<void> setupCameras() async {
     try {
       cameras = await availableCameras();
-      _controller = new CameraController(cameras[0], ResolutionPreset.medium);
+      _controller = new CameraController(cameras[0], ResolutionPreset.high);
       _initializeControllerFuture =  _controller.initialize();
     } on CameraException catch (_) {
       setState(() {
@@ -120,7 +120,7 @@ class ScanScreenState extends State<ScanScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(imagePath: path),
+                builder: (context) => ScanConfirm(imagePath: path),
               ),
             );
           } catch (e) {
