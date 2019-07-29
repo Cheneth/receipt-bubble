@@ -52,21 +52,10 @@ class _ScanConfirmState extends State<ScanConfirm> {
     final VisionText visionText =
         await textRecognizer.processImage(visionImage);
     
-    ConfirmHelper.printText(visionText);
-    // got the pattern from that SO answer: https://stackoverflow.com/questions/16800540/validate-email-address-in-dart
-    String mailPattern =
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$";
-    RegExp regEx = RegExp(mailPattern);
-
-    String mailAddress =
-        "Couldn't find any mail in the foto! Please try again!";
-    for (TextBlock block in visionText.blocks) {
-      for (TextLine line in block.lines) {
-        if (regEx.hasMatch(line.text)) {
-          mailAddress = line.text;
-        }
-      }
-    }
+    var text = ConfirmHelper.getText(visionText);
+    var receiptInfo = ConfirmHelper.getItems(text);
+    print(receiptInfo.items);
+    print(receiptInfo.finalTotal);
   }
 
   @override
