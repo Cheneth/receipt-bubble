@@ -55,6 +55,11 @@ class _ScanConfirmState extends State<ScanConfirm> {
     var text = ConfirmHelper.getText(visionText);
     var receiptInfo = ConfirmHelper.getItems(text);
     print(receiptInfo.items);
+    for(int i = 0; i < receiptInfo.items.length; i++){
+      print(receiptInfo.items[i].name);
+      print(receiptInfo.items[i].totalCost);
+    }
+    print(receiptInfo.finalTax);
     print(receiptInfo.finalTotal);
   }
 

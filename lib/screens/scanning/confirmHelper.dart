@@ -68,10 +68,12 @@ class ConfirmHelper {
   static num findSubtotal(List lines){
 
     RegExp subtotalExp = new RegExp(r"[Ss][Uu][Bb]\s?[Tt][Oo][Tt][Aa][Ll]");
+     RegExp moneyExp = new RegExp(r"([0-9]{1,3}\.[0-9]{2})");
+
 
     for(int i = lines.length-1; i >= 0; i--){
-        if(subtotalExp.hasMatch(lines[i])){
-            num lineCost = num.parse(subtotalExp.stringMatch(lines[i]).toString());
+        if(subtotalExp.hasMatch(lines[i]) && moneyExp.hasMatch(lines[i])){
+            num lineCost = num.parse(moneyExp.stringMatch(lines[i]).toString());
             return lineCost;
         }
     }
@@ -93,7 +95,7 @@ class ConfirmHelper {
     //REGEX
     RegExp moneyExp = new RegExp(r"([0-9]{1,3}\.[0-9]{2})");
     RegExp totalExp = new RegExp(r"([Tt][Oo][Tt][Aa][Ll])");
-    RegExp taxExp = new RegExp(r"([Tt][Aa][Xx])");
+    RegExp taxExp = new RegExp(r"([Tt][Aa][Xx])|([Hh][Ss][Tt])|([Gg][Ss][Tt])");
     RegExp quantityExp = new RegExp(r"^([0-9]){1,3}\s|[(]([0-9]){1,3}");
    
     // RegExp totalExp = new RegExp(r"([Tt][Oo][Tt][Aa][Ll])");
@@ -112,6 +114,7 @@ class ConfirmHelper {
                 }
         }
     }
+    print('SCAN TOTAL: ' + scanTotal.toString());
     while(lines.length > totalLine+1){
             lines.removeLast();
     }
@@ -172,20 +175,21 @@ class ConfirmHelper {
     }
 
     //finding which final values to use
-
-    if(scanTotal == (subtotal + scanTax)){
-            finalTax = scanTax;
-            finalTotal = scanTotal;
-        }else if(calcTotal == (subtotal + scanTax)){
-            finalTax = scanTax;
-            finalTotal = calcTotal;
-        }else if(calcTotal == (subtotal + calcTax)){
-            finalTax = calcTax;
-            finalTotal = calcTotal;
-        }else{
-            finalTax = calcTax;
-            finalTotal = scanTotal;
-        } 
+    finalTotal = scanTotal;
+    finalTax = scanTax;
+    // if(scanTotal == (subtotal + scanTax)){
+    //         finalTax = scanTax;
+    //         finalTotal = scanTotal;
+    //     }else if(calcTotal == (subtotal + scanTax)){
+    //         finalTax = scanTax;
+    //         finalTotal = calcTotal;
+    //     }else if(calcTotal == (subtotal + calcTax)){
+    //         finalTax = calcTax;
+    //         finalTotal = calcTotal;
+    //     }else{
+    //         finalTax = calcTax;
+    //         finalTotal = scanTotal;
+    //     } 
      return (new ReceiptInfo(items, finalTotal, finalTax));
   }
 
@@ -209,13 +213,13 @@ class ConfirmHelper {
     }
 
     getBoundingPolygon(mergedLines);
-    for(WordBox box in mergedLines){
-          print(box.text);
-          print(box.vertices);
-          print(box.boundingBox);
-          // print(box.lineNum);
-          // print(box.match);
-    }
+    // for(WordBox box in mergedLines){
+    //       print(box.text);
+    //       print(box.vertices);
+    //       print(box.boundingBox);
+    //       // print(box.lineNum);
+    //       // print(box.match);
+    // }
     print('-------------------------');
     combineBoundingPolygon(mergedLines);
 
@@ -244,6 +248,8 @@ class ConfirmHelper {
         }
       }
     }
+    // print('hello');
+    // print(finalLines);
 
     return finalLines;
   }
@@ -277,9 +283,9 @@ class ConfirmHelper {
       
       num h = max(h1, h2);
       num avgHeight = h*0.6;
-      num threshold = h;
-      print('HEIGHT:');
-      print(h);
+      num threshold = h*1;
+      // print('HEIGHT:');
+      // print(h);
       points.add(mergedLines[i].vertices[1]);
       points.add(mergedLines[i].vertices[0]);
       List<num> topLine = getLineMesh(points, avgHeight, true);
@@ -291,6 +297,8 @@ class ConfirmHelper {
       List<num> bottomLine = getLineMesh(points, avgHeight, false);
 
       mergedLines[i].setBox([[topLine[0], topLine[2]-threshold], [topLine[1], topLine[3]-threshold], [bottomLine[1], bottomLine[3]+threshold], [bottomLine[0], bottomLine[2]+threshold]]);//top left corner, then clockwise
+      // mergedLines[i].setBox([[topLine[0], topLine[2]], [topLine[1], topLine[3]], [bottomLine[1], bottomLine[3]], [bottomLine[0], bottomLine[2]]]);//top left corner, then clockwise
+
       mergedLines[i].setlineNum(i);
       
     }
