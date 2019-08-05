@@ -17,6 +17,17 @@ import 'package:receipt_bubble/screens/scanning/confirmHelper.dart';
 //     );
 //   }
 // }
+class ReceiptInfo {
+  List items;
+  num finalTotal;
+  num finalTax;
+
+  ReceiptInfo(List items, num finalTotal, num finalTax){
+    this.items = items;
+    this.finalTotal = finalTotal;
+    this.finalTax = finalTax;
+  }
+}
 
 class ScanConfirm extends StatefulWidget {
 
@@ -29,11 +40,27 @@ class ScanConfirm extends StatefulWidget {
 
 class _ScanConfirmState extends State<ScanConfirm> {
 
-  String recognizedText = "Loading ...";
+  var receiptInfo;
+  VisionText visionText;
+  bool receiptReady = false;
 
   void initState() {
     super.initState();
     _initializeVision();
+    // print('done');
+  }
+
+  Future getReceiptInfo(visionText) async {
+    var text = ConfirmHelper.getText(visionText);
+
+    var info = ConfirmHelper.getItems(text);
+
+    setState(() {
+      receiptInfo = info;
+      receiptReady = true;
+    });
+    // return;
+
   }
 
   void _initializeVision() async {
@@ -49,24 +76,69 @@ class _ScanConfirmState extends State<ScanConfirm> {
         FirebaseVision.instance.textRecognizer();
 
     // find text in image
-    final VisionText visionText =
-        await textRecognizer.processImage(visionImage);
+    VisionText localVisionText = await textRecognizer.processImage(visionImage);
     
-    var text = ConfirmHelper.getText(visionText);
-    var receiptInfo = ConfirmHelper.getItems(text);
-    print(receiptInfo.items);
-    for(int i = 0; i < receiptInfo.items.length; i++){
-      print(receiptInfo.items[i].name);
-      print(receiptInfo.items[i].totalCost);
-    }
-    print(receiptInfo.finalTax);
-    print(receiptInfo.finalTotal);
+    setState(() {//can't put await inside because it can only be in async
+      visionText = localVisionText;
+    });
+
+    // var info = await _getReceiptInfo(visionText);
+    // setState(() {
+    //   receiptInfo = info;
+    //   receiptReady = true;
+    // });
+    
+    // print(receiptInfo.items);
+    // for(int i = 0; i < receiptInfo.items.length; i++){
+    //   print(receiptInfo.items[i].name);
+    //   print(receiptInfo.items[i].totalCost);
+    // }
+    // print(receiptInfo.finalTax);
+    // print(receiptInfo.finalTotal);
+
+    // print('done');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-       child: Image.file(File(widget.imagePath))
+    return Scaffold(
+        // child: Image.file(File(widget.imagePath))
+        body: FutureBuilder(
+          future: getReceiptInfo(visionText),
+          builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done && receiptInfo != null) {
+            // If the Future is complete, display the preview.
+            print('receipt');
+            return ListView.builder(
+              padding: const EdgeInsets.all(8.0),
+              itemCount: receiptInfo.items.length,
+              itemBuilder: (BuildContext context, int i) {
+                return Container(
+                  height: 50,
+                  // color: Colors.white,
+                  child: Center(child: Text('Entry ${receiptInfo.items[i].name}')),
+                );
+              } 
+            );
+          } else {
+            // Otherwise, display a loading indicator.
+            print('loading');
+
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+        )
+      // child: receiptInfo == null ? Text('Loading...') : ListView.builder(
+      //   padding: const EdgeInsets.all(8.0),
+      //   itemCount: receiptInfo.length,
+      //   itemBuilder: (BuildContext context, int i) {
+      //     return Container(
+      //       height: 50,
+      //       color: Colors.white,
+      //       child: Center(child: Text('Entry ${receiptInfo.items[i].name}')),
+      //     );
+      //   } 
+      // )
     );
   }
 }
