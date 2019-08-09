@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:receipt_bubble/screens/groups/connect_to_group_screen.dart';
 import 'package:receipt_bubble/screens/scanning/scan_screen.dart';
 import 'package:receipt_bubble/services/authentication.dart';
 import 'package:receipt_bubble/widgets/random_words.dart';
 import 'package:receipt_bubble/widgets/color_test.dart';
 import 'package:firebase_database/firebase_database.dart';
 //import 'package:my_app/models/todo.dart';
-import 'package:receipt_bubble/models/TestModel.dart';
 import 'dart:async';
 
 class HomePage extends StatefulWidget {
@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
 int _currentIndex = 0;
 
 final List<Widget> _children = [
-  PlaceholderWidget(Colors.white),
+  ConnectToGroup(),
   ScanScreen(),
   PlaceholderWidget(Colors.green),
   PlaceholderWidget(Colors.pink),

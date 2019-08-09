@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:receipt_bubble/screens/scanning/confirmHelper.dart';
@@ -17,6 +19,10 @@ import 'package:receipt_bubble/screens/scanning/confirmHelper.dart';
 //     );
 //   }
 // }
+
+final formatCurrency = new NumberFormat.simpleCurrency();
+final FirebaseDatabase _database = FirebaseDatabase.instance;
+
 class ReceiptInfo {
   List items;
   num finalTotal;
@@ -99,9 +105,18 @@ class _ScanConfirmState extends State<ScanConfirm> {
     // print('done');
   }
 
+  void uploadReceipt(){
+
+
+
+    print('Uploading Receipt...');
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(),
         // child: Image.file(File(widget.imagePath))
         body: FutureBuilder(
           future: getReceiptInfo(visionText),
@@ -109,17 +124,45 @@ class _ScanConfirmState extends State<ScanConfirm> {
           if (snapshot.connectionState == ConnectionState.done && receiptInfo != null) {
             // If the Future is complete, display the preview.
             print('receipt');
-            return ListView.builder(
-              padding: const EdgeInsets.all(8.0),
-              itemCount: receiptInfo.items.length,
-              itemBuilder: (BuildContext context, int i) {
-                return Container(
-                  height: 50,
-                  // color: Colors.white,
-                  child: Center(child: Text('Entry ${receiptInfo.items[i].name}')),
-                );
-              } 
-            );
+            return Column(children: [
+              Expanded(child: ListView.builder(
+                padding: const EdgeInsets.all(8.0),
+                itemCount: receiptInfo.items.length,
+                itemBuilder: (BuildContext context, int i) {
+                  return ListTile(
+                    title: Text('${receiptInfo.items[i].name != '' ? receiptInfo.items[i].name : 'Unknown Item'}'),
+                    trailing: Text('${formatCurrency.format(receiptInfo.items[i].totalCost)}'),
+                  );
+                } 
+              ),
+            ),
+            Divider(color: Colors.grey,),
+            ListTile(
+              title: Text('Tax'),
+              trailing: Text('${formatCurrency.format(receiptInfo.finalTax)}'),
+            ),
+            ListTile(
+              
+              title: Text('Total'),
+              trailing: Text('${formatCurrency.format(receiptInfo.finalTotal)}'),
+            ),
+            Center(
+              child: RaisedButton(
+                color: Colors.green,
+                onPressed: () {this.uploadReceipt();},
+                child: Text(
+                  'Confirm'
+                ),
+              ),
+            ),
+            Container(
+              height: 20.0,
+            ),
+              
+
+            ],);
+            
+            
           } else {
             // Otherwise, display a loading indicator.
             print('loading');
@@ -128,17 +171,6 @@ class _ScanConfirmState extends State<ScanConfirm> {
           }
         },
         )
-      // child: receiptInfo == null ? Text('Loading...') : ListView.builder(
-      //   padding: const EdgeInsets.all(8.0),
-      //   itemCount: receiptInfo.length,
-      //   itemBuilder: (BuildContext context, int i) {
-      //     return Container(
-      //       height: 50,
-      //       color: Colors.white,
-      //       child: Center(child: Text('Entry ${receiptInfo.items[i].name}')),
-      //     );
-      //   } 
-      // )
     );
   }
 }
