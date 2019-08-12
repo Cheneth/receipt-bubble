@@ -17,8 +17,11 @@ class ScanScreen extends StatefulWidget {
 
   const ScanScreen({
     Key key,
+    this.userEmail,
     // this.camera,
   }) : super(key: key);
+
+  final String userEmail;
 
   @override
   ScanScreenState createState() => ScanScreenState();
@@ -29,6 +32,7 @@ class ScanScreenState extends State<ScanScreen> {
   Future<void> _initializeControllerFuture;
   List<CameraDescription> cameras;
 
+  
   bool isReady = false;
   bool showCamera = true;
   @override
@@ -83,7 +87,7 @@ class ScanScreenState extends State<ScanScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             // If the Future is complete, display the preview.
-            print('preview');
+            print('Preview');
             return CameraPreview(_controller);
           } else {
             // Otherwise, display a loading indicator.
@@ -120,7 +124,7 @@ class ScanScreenState extends State<ScanScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ScanConfirm(imagePath: path),
+                builder: (context) => ScanConfirm(imagePath: path, userEmail: widget.userEmail,),
               ),
             );
           } catch (e) {

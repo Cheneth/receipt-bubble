@@ -2,9 +2,14 @@ import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:receipt_bubble/screens/scanning/confirmHelper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:random_string/random_string.dart';
+
+import 'package:receipt_bubble/models/RtReceiptModel.dart';
 // class DisplayPictureScreen extends StatelessWidget {
 //   final String imagePath;
 //   const DisplayPictureScreen({Key key, this.imagePath}) : super(key: key);
@@ -23,6 +28,20 @@ import 'package:receipt_bubble/screens/scanning/confirmHelper.dart';
 final formatCurrency = new NumberFormat.simpleCurrency();
 final FirebaseDatabase _database = FirebaseDatabase.instance;
 
+class Item {
+  String name;
+  num totalCost;
+  num unitCost;
+  int quantity;
+
+  Item(String name, num totalCost, num unitCost, int quantity){
+    this.name = name;
+    this.totalCost = totalCost;
+    this.unitCost = unitCost;
+    this.quantity = quantity;
+  }
+}
+
 class ReceiptInfo {
   List items;
   num finalTotal;
@@ -39,7 +58,9 @@ class ScanConfirm extends StatefulWidget {
 
   final String imagePath;
 
-  ScanConfirm({Key key, this.imagePath}) : super(key: key);
+  ScanConfirm({Key key, this.imagePath, this.userEmail}) : super(key: key);
+
+  final String userEmail;
 
   _ScanConfirmState createState() => _ScanConfirmState();
 }
@@ -47,8 +68,10 @@ class ScanConfirm extends StatefulWidget {
 class _ScanConfirmState extends State<ScanConfirm> {
 
   var receiptInfo;
+  
   VisionText visionText;
   bool receiptReady = false;
+  final db = Firestore.instance;
 
   void initState() {
     super.initState();
@@ -105,8 +128,35 @@ class _ScanConfirmState extends State<ScanConfirm> {
     // print('done');
   }
 
-  void uploadReceipt(){
+  String getPrettyJSONString(jsonObject){
+    var encoder = new JsonEncoder.withIndent("     ");
+    return encoder.convert(jsonObject);
+  }
 
+  void uploadReceipt () async {
+    String groupID = randomAlpha(5).toUpperCase();
+    var newReceipt = new RtReceipt(receiptInfo.items, receiptInfo.finalTotal, receiptInfo.finalTax, widget.userEmail, groupID);
+    // newReceipt.toJson();
+    // print(newReceipt.items);
+    // print(getPrettyJSONString(newReceipt.toJson()));
+    try{
+      db.collection("receipts").add(newReceipt.toJson());
+    }catch(err){
+      print(err);
+      print('Database error');
+    }
+
+
+    // var query = db.collection("receipts").where('groupID', isEqualTo: 'abcd');
+    // QuerySnapshot snapshot = await query.getDocuments();
+    // try{
+    //   print(snapshot.documents[0].data);
+
+    // }catch(err){
+    //   print(err);
+    //   print('Database error');
+    // }
+      
 
 
     print('Uploading Receipt...');

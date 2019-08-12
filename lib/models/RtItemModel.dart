@@ -14,4 +14,14 @@ class RtItem {
     this.unitCost = unitCost;
     this.quantity = quantity;
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "name": name,
+      "totalCost": totalCost,
+      "unitCost": unitCost,
+      "quantity": quantity,
+      "userEmails": userEmails,
+    };
+  }
 }

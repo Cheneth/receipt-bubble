@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:receipt_bubble/widgets/random_words.dart';
 import 'package:receipt_bubble/screens/login_signup_page.dart';
 import 'package:receipt_bubble/screens/root_page.dart';
 import 'package:flutter/services.dart';
