@@ -61,6 +61,10 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
             _errorMessage = e.message;
         });
       }
+    }else{
+      setState(() {
+      _isLoading = false;
+    });
     }
   }
 
@@ -70,6 +74,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
       form.save();
       return true;
     }
+
     return false;
   }
 
@@ -110,7 +115,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
           radius: 48.0,
-          child: Image.asset('assets/flutter-icon.png'),
+          child: Image.asset('assets/receipt-icon.png'),
         ),
       ),
     );
@@ -169,7 +174,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
         elevation: 5.0,
         minWidth: 200.0,
         height: 42.0,
-        color: Colors.blue,
+        color: Colors.black,
         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
         child: _formMode == FormMode.LOGIN
             ? new Text('Login',

@@ -80,7 +80,7 @@ void initState() {
 
  Widget getUserProfileWidget(){
 
-   return UserProfile(auth: widget.auth, onSignedOut: widget.onSignedOut);
+   return UserProfile(auth: widget.auth, onSignedOut: widget.onSignedOut, userEmail: widget.userEmail,);
  }
 
  void signOut() async {

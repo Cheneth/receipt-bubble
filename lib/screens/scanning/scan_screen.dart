@@ -18,7 +18,6 @@ class ScanScreen extends StatefulWidget {
   const ScanScreen({
     Key key,
     this.userEmail,
-    // this.camera,
   }) : super(key: key);
 
   final String userEmail;
