@@ -9,7 +9,7 @@ To solve this issue, I created Receipt Bubble.
 ## Goal of the project
 The goal is to be able to take a picture of a receipt and have the app return you a list of items on that receipt. From there, I wanted users to be able to pick and choose what elements of the receipt that they want to pay for.
 ## Basic User Flow
-User 1:
+Primary User:
 
  1. Takes picture of receipt
  2. Take user to receipt screen with the items, tax, total
