@@ -16,6 +16,17 @@ Primary User:
  3. User either chooses to continue or retake the photo
  4. If they continue, take the user to the split screen with a group code
  5. User 1 shares the group code with other users
+ 
+### Screenshots
+
+Scanning and parsing of a receipt:
+
+
+<img src="https://i.imgur.com/yw5PaAd.jpg" width="250" /> <img src="https://i.imgur.com/9plrNCZ.jpg" width="250" />
+
+Claiming items by account:
+
+<img src="https://i.imgur.com/5vhw6cg.jpg" width="250" />
 
 Other users:
 
@@ -30,7 +41,7 @@ Once in the splitting screen:
  - User authentication by email and password ✅
  - Can scan and parse items from a receipt (including tax and total) ✅
  - Can split by item between users ✅
-## Future Plans
+## Future Ideas
  - QR codes for group codes
  - Splitting unequal percentages on items
  - Personal history of receipts
